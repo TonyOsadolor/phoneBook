@@ -3,7 +3,20 @@
 
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <!-- Name Group -->
+            <flux:input.group>
+                <!-- First Name -->
+                <flux:input
+                    wire:model="first_name" :label="__('First Name')" type="text" required autofocus autocomplete="off"
+                    :placeholder="__('John')"
+                />
+
+                <!-- Last Name -->
+                <flux:input
+                    wire:model="last_name" :label="__('Last Name')" type="text" required autocomplete="off"
+                    :placeholder="__('Doe')"
+                />
+            </flux:input.group>
 
             <div>
                 <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
@@ -26,6 +39,27 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Username -->
+            <flux:input
+                wire:model="username" :label="__('Username')" type="text" required autocomplete="off"
+                :placeholder="__('JohnxxDoe')"
+            />
+
+            <!-- Phone Number -->
+            <flux:input.group :label="__('Phone Number')">
+                <flux:select searchable wire:model="phonecode" placeholder="Phone Code...">
+                    @foreach (\App\Models\Country::where('is_active', 1)->get() as $country)
+                        <flux:select.option value="+{{ $country->phonecode }}">{{ $country->name }} [+{{ $country->phonecode }}]</flux:select.option>
+                    @endforeach
+                </flux:select>
+                
+                <flux:input  class="max-w-fit"
+                    wire:model="phone" type="tel" 
+                    autocomplete="off"
+                    placeholder="9036-57-4839"
+                />
+            </flux:input.group>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
