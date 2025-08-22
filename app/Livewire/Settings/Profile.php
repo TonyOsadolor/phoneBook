@@ -10,16 +10,22 @@ use Livewire\Component;
 
 class Profile extends Component
 {
-    public string $name = '';
-
+    public string $first_name = '';
+    public string $last_name = '';
+    public string $username = '';
+    public string $phone = '';
     public string $email = '';
+    public string $phonecode = '';
 
     /**
      * Mount the component.
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
+        $this->first_name = Auth::user()->first_name;
+        $this->last_name = Auth::user()->last_name;
+        $this->username = Auth::user()->username;
+        $this->phone = Auth::user()->phone;
         $this->email = Auth::user()->email;
     }
 
@@ -31,17 +37,15 @@ class Profile extends Component
         $user = Auth::user();
 
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($user->id),
-            ],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:90', Rule::unique(User::class)->ignore($user->id)],
+            'username' => ['required', 'string', 'regex:/^[a-zA-Z0-9_]+$/', 'max:30', Rule::unique(User::class)->ignore($user->id)],
+            'phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'max:30', Rule::unique(User::class)->ignore($user->id)],
+            'phonecode' => ['nullable', 'string'],
         ]);
+
+        $validated['phone'] = $validated['phonecode'].$validated['phone'];
 
         $user->fill($validated);
 
@@ -51,7 +55,7 @@ class Profile extends Component
 
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
+        $this->dispatch('profile-updated', name: $user->full_name);
     }
 
     /**

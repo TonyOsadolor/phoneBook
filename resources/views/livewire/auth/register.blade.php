@@ -5,16 +5,20 @@
     <x-auth-session-status class="text-center" :status="session('status')" />
 
     <form method="POST" wire:submit="register" class="flex flex-col gap-6">
-        <!-- Name -->
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
-        />
+        <!-- Name Group -->
+        <flux:input.group>
+            <!-- First Name -->
+            <flux:input
+                wire:model="first_name" :label="__('First Name')" type="text" required autofocus autocomplete="off"
+                :placeholder="__('John')"
+            />
+
+            <!-- Last Name -->
+            <flux:input
+                wire:model="last_name" :label="__('Last Name')" type="text" required autocomplete="off"
+                :placeholder="__('Doe')"
+            />
+        </flux:input.group>
 
         <!-- Email Address -->
         <flux:input
@@ -24,6 +28,27 @@
             required
             autocomplete="email"
             placeholder="email@example.com"
+        />
+        
+        <!-- Phone Number -->
+        <flux:input.group :label="__('Phone Number')">
+            <flux:select searchable wire:model="phonecode" placeholder="Phone Code...">
+                @foreach (\App\Models\Country::where('is_active', 1)->get() as $country)
+                    <flux:select.option value="+{{ $country->phonecode }}">{{ $country->name }} [+{{ $country->phonecode }}]</flux:select.option>
+                @endforeach
+            </flux:select>
+            
+            <flux:input  class="max-w-fit"
+                wire:model="phone" type="tel" 
+                autocomplete="off"
+                placeholder="9036-57-4839"
+            />
+        </flux:input.group>
+
+        <!-- Username -->
+        <flux:input
+            wire:model="username" :label="__('Username')" type="text" required autocomplete="off"
+            :placeholder="__('JohnxxDoe')"
         />
 
         <!-- Password -->

@@ -47,6 +47,7 @@ Basic feature of the App built with Laravel Classes includes:
     <li>LiveWire Classes</li>
     <li>LiveWire Blade Templates</li>
     <li>Traits <code>for running under the hood tasks [NOT for Jobs and Queued Schedules]</code></li>
+    <li>Policies <code>This handles security of Models to ensure the right access by owners</code></li>
 </ol>
 
 ##### Registration and Login
@@ -93,6 +94,9 @@ This hold the basic HTML structures of the WebApp
 ##### UI/UX [LiveWire, Flux & FlowBite]
 The UI of the App was handled with Flux, LiveWire and a bit of 
 FlowBite, to substitute for some Flux features which required paid version to use.
+
+##### Model Policies
+This helps to restrict access to only owners of record for CRUD operations
 
 ## License
 
